@@ -1,0 +1,1 @@
+This projects intended to practice my skill on basic HTML including boilerplate code.
