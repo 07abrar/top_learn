@@ -1,0 +1,183 @@
+body{
+    font-family: Roboto;
+}
+
+ul{
+    list-style-type: none;
+    display: flex;
+    padding: 0px;
+}
+
+li{
+    padding: 0 20px;
+}
+
+.header, .welcome, .footer{
+    background-color: #1F2937;
+    color: #f9faf8;
+    padding:0 100px;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .logo{
+    font-size: 24px;
+}
+
+.right-header{
+    color: rgb(214, 214, 214);
+}
+
+.welcome{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.welcome img{
+    width: 400px;
+}
+
+.welcome-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.welcome-left :is(h1, p) {
+    margin: 0;
+}
+
+.welcome-left h1{
+    font-size: 48px;
+    font-weight: 900;
+}
+
+.welcome-left p{
+    font-size: 18px;
+    color: #e5e7eb;
+}
+
+.welcome-left button {
+    color: white;
+    padding:3px 20px;
+    background-color: #3882F6;
+    border-radius: 5px;
+}
+
+.information-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 30px 100px;
+}
+
+.information-box h2{
+    font-size: 36px;
+    color: #1F2937;
+    font-weight: 900;
+}
+
+.boxes-container{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.box{
+    flex: 1 1 200px;
+    max-width: 250px;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    justify-content: baseline;
+}
+
+.box img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.box p{
+    margin: 0;
+    font-size: 16px;
+}
+
+.quote{
+    background-color: #e5e7eb;
+    font-size: 36px;
+    color: #1F2937;
+    font-weight: 300;
+    padding: 30px 100px;
+}
+
+.quote-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+blockquote{
+    font-style: italic;
+    margin: 0;
+}
+
+cite{
+    font-size: 16px;
+    font-style: normal;
+    align-self: flex-end;
+}
+
+.closing-call{
+    padding: 30px 100px;
+}
+
+.closing-call-container{
+    color: #e5e7eb;
+    background-color: #3882F6;
+    padding: 30px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.closing-call-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.closing-call-left p,
+.closing-call h3{
+    margin: 0;
+}
+
+.closing-call-right{
+    display: flex;
+    align-items: center;
+}
+
+.closing-call-right button{
+    color: white;
+    padding:3px 20px;
+    background-color: #3882F6;
+    border-radius: 5px;
+}
+
+.footer {
+  height: 56px;
+  text-align: center;
+  line-height: 56px;
+}
