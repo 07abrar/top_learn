@@ -1,0 +1,8 @@
+* {
+    outline: 2px solid red;
+}
+
+.web-title {
+    display: flex;
+    justify-content: center;
+}
