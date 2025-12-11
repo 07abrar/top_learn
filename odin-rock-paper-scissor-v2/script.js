@@ -28,12 +28,30 @@ humanPlayGround.className = "human-play-ground";
 
 const humanTempScore = String(5);
 const humanScore = document.createElement("div");
+humanScore.className = "score";
 humanScore.textContent = "YOU :" + humanTempScore;
 humanPlayGround.appendChild(humanScore);
 
 const humanChoice = document.createElement("div");
 humanChoice.className = "human-choice";
-humanPlayGround.append(humanChoice);
+
+const rockImg = document.createElement("img");
+rockImg.src = "./images/rock.png";
+rockImg.alt = "Rock";
+rockImg.height = "100";
+
+const paperImg = document.createElement("img");
+paperImg.src = "./images/paper.png";
+paperImg.alt = "Paper";
+paperImg.height = "100";
+
+const scissorsImg = document.createElement("img");
+scissorsImg.src = "./images/scissors.png";
+scissorsImg.alt = "Scissors";
+scissorsImg.height = "100";
+
+humanChoice.append(rockImg, paperImg, scissorsImg);
+humanPlayGround.appendChild(humanChoice);
 
 // Computer play ground
 const computerPlayGround = document.createElement("div");
@@ -41,11 +59,12 @@ computerPlayGround.className = "computer-play-ground";
 
 const computerTempScore = String(0);
 const computerScore = document.createElement("div");
+computerScore.className = "score";
 computerScore.textContent = "COMPUTER :" + computerTempScore;
 computerPlayGround.appendChild(computerScore);
 
 const computerChoice = document.createElement("div");
-computerChoice.className = "human-choice";
+computerChoice.className = "computer-choice";
 computerPlayGround.append(computerChoice);
 
 playGroundDiv.append(humanPlayGround, computerPlayGround);
