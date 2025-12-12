@@ -1,73 +1,88 @@
 const container = document.querySelector("#container");
+if (!container) {
+  throw new Error("#container not found");
+}
 
-const webTitleDiv = document.createElement("div");
-webTitleDiv.className = "web-title";
+function createElement(tag, { className, text, id, attrs } = {}) {
+  const el = document.createElement(tag);
 
-const webTitle = document.createElement("h1");
-webTitle.textContent = "ROCK PAPER SCISSORS";
+  if (className) el.className = className;
+  if (text) el.textContent = text;
+  if (id) el.id = id;
+  if (attrs) {
+    Object.entries(attrs).forEach(([key, value]) => {
+      el.setAttribute(key, value);
+    });
+  }
 
-webTitleDiv.appendChild(webTitle);
-container.appendChild(webTitleDiv);
+  return el;
+}
 
-const announceBoardDiv = document.createElement("div");
-announceBoardDiv.className = "announce-board";
+function createImage({ src, alt, height }) {
+  return createElement("img", {
+    attrs: { src, alt, height },
+  });
+}
 
-const startButton = document.createElement("button");
-startButton.textContent = "START";
-startButton.id = "start-button";
+function buildScore(label, value) {
+  return createElement("div", {
+    className: "score",
+    text: `${label}:${value}`,
+  });
+}
 
-announceBoardDiv.appendChild(startButton);
-container.appendChild(announceBoardDiv);
+function buildTitle() {
+  const wrapper = createElement("div", { className: "web-title" });
+  const title = createElement("h1", { text: "ROCK PAPER SCISSORS" });
+  wrapper.appendChild(title);
+  return wrapper;
+}
 
-const playGroundDiv = document.createElement("div");
-playGroundDiv.className = "play-ground";
+function buildAnnounceBoard() {
+  const wrapper = createElement("div", { className: "announce-board" });
+  const startButton = createElement("button", {
+    id: "start-button",
+    text: "START",
+  });
+  wrapper.appendChild(startButton);
+  return wrapper;
+}
 
-// Human play ground
-const humanPlayGround = document.createElement("div");
-humanPlayGround.className = "human-play-ground";
+function buildHumanChoice() {
+  const wrapper = createElement("div", { className: "human-choice" });
+  const images = [
+    { src: "./images/rock.png", alt: "Rock" },
+    { src: "./images/paper.png", alt: "Paper" },
+    { src: "./images/scissors.png", alt: "Scissors" },
+  ].map((img) => createImage({ ...img, height: 100 }));
+  wrapper.append(...images);
+  return wrapper;
+}
 
-const humanTempScore = String(5);
-const humanScore = document.createElement("div");
-humanScore.className = "score";
-humanScore.textContent = "YOU :" + humanTempScore;
-humanPlayGround.appendChild(humanScore);
+function buildHumanPlayGround() {
+  const humanTempScore = 5;
+  const humanPlayGroundWrapper = createElement("div", {
+    className: "human-play-ground",
+  });
+  const humanScore = buildScore("YOU", String(humanTempScore));
+  humanPlayGroundWrapper.append(humanScore, buildHumanChoice());
+  return humanPlayGroundWrapper;
+}
 
-const humanChoice = document.createElement("div");
-humanChoice.className = "human-choice";
+function buildComputerPlayGround() {
+  const computerTempScore = 0;
+  const computerPlayGroundWrapper = createElement("div", {
+    className: "computer-play-ground",
+  });
+  const computerScore = buildScore("COMPUTER", String(computerTempScore));
+  computerPlayGroundWrapper.append(computerScore);
+  return computerPlayGroundWrapper;
+}
 
-const rockImg = document.createElement("img");
-rockImg.src = "./images/rock.png";
-rockImg.alt = "Rock";
-rockImg.height = "100";
+function buildPlayGround() {
+  const wrapper = createElement("div", { className: "play-ground" });
+  wrapper.append(buildHumanPlayGround(), buildComputerPlayGround());
+  return wrapper;
+}
 
-const paperImg = document.createElement("img");
-paperImg.src = "./images/paper.png";
-paperImg.alt = "Paper";
-paperImg.height = "100";
-
-const scissorsImg = document.createElement("img");
-scissorsImg.src = "./images/scissors.png";
-scissorsImg.alt = "Scissors";
-scissorsImg.height = "100";
-
-humanChoice.append(rockImg, paperImg, scissorsImg);
-humanPlayGround.appendChild(humanChoice);
-
-// Computer play ground
-const computerPlayGround = document.createElement("div");
-computerPlayGround.className = "computer-play-ground";
-
-const computerTempScore = String(0);
-const computerScore = document.createElement("div");
-computerScore.className = "score";
-computerScore.textContent = "COMPUTER :" + computerTempScore;
-computerPlayGround.appendChild(computerScore);
-
-const computerChoice = document.createElement("div");
-computerChoice.className = "computer-choice";
-computerPlayGround.append(computerChoice);
-
-playGroundDiv.append(humanPlayGround, computerPlayGround);
-container.appendChild(playGroundDiv);
-
-// TODO : add images for rock paper scissor under playground
+container.append(buildTitle(), buildAnnounceBoard(), buildPlayGround());
