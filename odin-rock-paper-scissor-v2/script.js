@@ -1,8 +1,18 @@
+// ROOT CONTAINER
 const container = document.querySelector("#container");
 if (!container) {
   throw new Error("#container not found");
 }
 
+// GAME STATES
+const gameState = {
+  state: "idle", // "idle"|"playing"|"match-point"|"ended"
+  humanScore: 0,
+  computerScore: 0,
+  winner: null,
+};
+
+// DOM HELPERS
 function createElement(tag, { className, text, id, attrs } = {}) {
   const el = document.createElement(tag);
 
@@ -24,13 +34,15 @@ function createImage({ src, alt, height }) {
   });
 }
 
-function buildScore(label, value) {
+function buildScore(id, label) {
   return createElement("div", {
+    id: `${id}`,
     className: "score",
-    text: `${label}:${value}`,
+    text: `${label}:0`,
   });
 }
 
+// UI BUILDERS
 function buildTitle() {
   const wrapper = createElement("div", { className: "web-title" });
   const title = createElement("h1", { text: "ROCK PAPER SCISSORS" });
@@ -38,14 +50,25 @@ function buildTitle() {
   return wrapper;
 }
 
-function buildAnnounceBoard() {
-  const wrapper = createElement("div", { className: "announce-board" });
-  const startButton = createElement("button", {
+function buildStartButton() {
+  return createElement("button", {
     id: "start-button",
     text: "START",
   });
-  wrapper.appendChild(startButton);
-  return wrapper;
+}
+
+function buildStatusText() {
+  return createElement("p", {
+    id: "status-text",
+    text: "",
+  });
+}
+
+function buildRematchButton() {
+  return createElement("button", {
+    id: "rematch-button",
+    text: "REMATCH",
+  });
 }
 
 function buildHumanChoice() {
@@ -55,6 +78,8 @@ function buildHumanChoice() {
     { src: "./images/paper.png", alt: "Paper" },
     { src: "./images/scissors.png", alt: "Scissors" },
   ].map((img) => createImage({ ...img, height: 100 }));
+
+  images.forEach((image) => image.addEventListener("click", onHumanChoice));
   wrapper.append(...images);
   return wrapper;
 }
@@ -64,7 +89,7 @@ function buildHumanPlayGround() {
   const humanPlayGroundWrapper = createElement("div", {
     className: "human-play-ground",
   });
-  const humanScore = buildScore("YOU", String(humanTempScore));
+  const humanScore = buildScore("human-score", "YOU");
   humanPlayGroundWrapper.append(humanScore, buildHumanChoice());
   return humanPlayGroundWrapper;
 }
@@ -74,7 +99,7 @@ function buildComputerPlayGround() {
   const computerPlayGroundWrapper = createElement("div", {
     className: "computer-play-ground",
   });
-  const computerScore = buildScore("COMPUTER", String(computerTempScore));
+  const computerScore = buildScore("computer-score", "COMPUTER");
   computerPlayGroundWrapper.append(computerScore);
   return computerPlayGroundWrapper;
 }
@@ -85,4 +110,94 @@ function buildPlayGround() {
   return wrapper;
 }
 
-container.append(buildTitle(), buildAnnounceBoard(), buildPlayGround());
+// GAME LOGIC
+function startGame() {
+  gameState.state = "playing";
+  gameState.humanScore = 0;
+  gameState.computerScore = 0;
+  render();
+}
+
+function rematchGame() {
+  gameState.state = "playing";
+  gameState.humanScore = 0;
+  gameState.computerScore = 0;
+  render();
+}
+
+function onHumanChoice() {
+  if (gameState.state === "ended") return; // Ignore after game ends
+
+  // Simulate result (random winner)
+  const humanWins = Math.random() > 0.5; // Placeholder logic
+
+  if (humanWins) {
+    gameState.humanScore += 1; // Increment human
+  } else {
+    gameState.computerScore += 1; // Increment computer
+  }
+
+  // Determine state transitions
+  if (gameState.humanScore === 5) {
+    gameState.state = "ended";
+    gameState.winner = "HUMAN";
+  } else if (gameState.computerScore === 5) {
+    gameState.state = "ended";
+    gameState.winner = "COMPUTER";
+  } else if (gameState.humanScore === 4 || gameState.computerScore === 4) {
+    gameState.state = "match-point";
+  } else {
+    gameState.state = "playing";
+  }
+
+  render(); // Update UI
+}
+
+// RENDER
+function render() {
+  document.getElementById(
+    "human-score"
+  ).textContent = `YOU:${gameState.humanScore}`;
+  document.getElementById(
+    "computer-score"
+  ).textContent = `COMPUTER:${gameState.computerScore}`;
+
+  const statusText = document.getElementById("status-text");
+  statusText.textContent = "";
+
+  if (gameState.state === "idle") {
+    document.getElementById("start-button").style.display = "block";
+    document.getElementById("rematch-button").style.display = "none";
+  } else if (gameState.state === "playing") {
+    document.getElementById("start-button").style.display = "none";
+    document.getElementById("status-text").textContent = "GAME START!";
+    document.getElementById("rematch-button").style.display = "none";
+  } else if (gameState.state === "match-point") {
+    document.getElementById("start-button").style.display = "none";
+    document.getElementById("status-text").textContent = "MATCH POINT!";
+    document.getElementById("rematch-button").style.display = "none";
+  } else if (gameState.state === "ended") {
+    document.getElementById("start-button").style.display = "none";
+    document.getElementById(
+      "status-text"
+    ).textContent = `${gameState.winner} WIN`;
+    document.getElementById("rematch-button").style.display = "block";
+  }
+}
+
+// INITIAL BOOTSTRAP
+const startButton = buildStartButton();
+const statusText = buildStatusText();
+const rematchButton = buildRematchButton();
+
+startButton.addEventListener("click", startGame);
+rematchButton.addEventListener("click", rematchGame);
+
+const announceBoardWrapper = createElement("div", {
+  className: "announce-board",
+});
+announceBoardWrapper.append(startButton, statusText, rematchButton);
+
+container.append(buildTitle(), announceBoardWrapper, buildPlayGround());
+
+render();
