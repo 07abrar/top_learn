@@ -2,7 +2,53 @@
     outline: 2px solid red;
 }
 
+#container{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .web-title {
     display: flex;
     justify-content: center;
+}
+
+.announce-board{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start-button, #rematch-button {
+    background-color: darkcyan;
+    padding: 12px 24px;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.play-ground{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.score{
+    text-align: center;
+}
+
+.human-choice{
+    display: flex;
+    gap: 24px;
+}
+
+.human-choice img{
+    cursor: pointer;
+}
+
+.human-play-ground{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
