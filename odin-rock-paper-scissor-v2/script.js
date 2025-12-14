@@ -36,7 +36,7 @@ function createImage({ src, alt, height }) {
 
 function buildScore(id, label) {
   return createElement("div", {
-    id: `${id}`,
+    id: id,
     className: "score",
     text: `${label}:0`,
   });
@@ -85,7 +85,6 @@ function buildHumanChoice() {
 }
 
 function buildHumanPlayGround() {
-  const humanTempScore = 5;
   const humanPlayGroundWrapper = createElement("div", {
     className: "human-play-ground",
   });
@@ -95,7 +94,6 @@ function buildHumanPlayGround() {
 }
 
 function buildComputerPlayGround() {
-  const computerTempScore = 0;
   const computerPlayGroundWrapper = createElement("div", {
     className: "computer-play-ground",
   });
@@ -115,26 +113,20 @@ function startGame() {
   gameState.state = "playing";
   gameState.humanScore = 0;
   gameState.computerScore = 0;
-  render();
-}
-
-function rematchGame() {
-  gameState.state = "playing";
-  gameState.humanScore = 0;
-  gameState.computerScore = 0;
+  gameState.winner = null;
   render();
 }
 
 function onHumanChoice() {
-  if (gameState.state === "ended") return; // Ignore after game ends
+  if (gameState.state === "ended") return;
 
   // Simulate result (random winner)
-  const humanWins = Math.random() > 0.5; // Placeholder logic
+  const humanWins = Math.random() > 0.5;
 
   if (humanWins) {
-    gameState.humanScore += 1; // Increment human
+    gameState.humanScore += 1;
   } else {
-    gameState.computerScore += 1; // Increment computer
+    gameState.computerScore += 1;
   }
 
   // Determine state transitions
@@ -150,10 +142,37 @@ function onHumanChoice() {
     gameState.state = "playing";
   }
 
-  render(); // Update UI
+  render();
 }
 
 // RENDER
+function renderAnnounceBoard() {
+  announceBoardWrapper.innerHTML = "";
+
+  if (gameState.state === "idle") {
+    announceBoardWrapper.append(startButton);
+    return;
+  }
+
+  if (gameState.state === "playing") {
+    statusText.textContent = "GAME START!";
+    announceBoardWrapper.append(statusText);
+    return;
+  }
+
+  if (gameState.state === "match-point") {
+    statusText.textContent = "MATCH POINT!";
+    announceBoardWrapper.append(statusText);
+    return;
+  }
+
+  if (gameState.state === "ended") {
+    statusText.textContent = `${gameState.winner} WIN!`;
+    announceBoardWrapper.append(statusText, rematchButton);
+    return;
+  }
+}
+
 function render() {
   document.getElementById(
     "human-score"
@@ -162,15 +181,14 @@ function render() {
     "computer-score"
   ).textContent = `COMPUTER:${gameState.computerScore}`;
 
-  const statusText = document.getElementById("status-text");
-  statusText.textContent = "";
+  renderAnnounceBoard();
 
   if (gameState.state === "idle") {
     document.getElementById("start-button").style.display = "block";
     document.getElementById("rematch-button").style.display = "none";
   } else if (gameState.state === "playing") {
     document.getElementById("start-button").style.display = "none";
-    document.getElementById("status-text").textContent = "GAME START!";
+    document.getElementById("status-text").textContent = "GAME STARTED!";
     document.getElementById("rematch-button").style.display = "none";
   } else if (gameState.state === "match-point") {
     document.getElementById("start-button").style.display = "none";
@@ -189,14 +207,12 @@ function render() {
 const startButton = buildStartButton();
 const statusText = buildStatusText();
 const rematchButton = buildRematchButton();
-
-startButton.addEventListener("click", startGame);
-rematchButton.addEventListener("click", rematchGame);
-
 const announceBoardWrapper = createElement("div", {
   className: "announce-board",
 });
-announceBoardWrapper.append(startButton, statusText, rematchButton);
+
+startButton.addEventListener("click", startGame);
+rematchButton.addEventListener("click", startGame);
 
 container.append(buildTitle(), announceBoardWrapper, buildPlayGround());
 
