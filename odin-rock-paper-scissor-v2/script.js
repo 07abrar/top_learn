@@ -9,7 +9,15 @@ const gameState = {
   state: "idle", // "idle"|"playing"|"match-point"|"ended"
   humanScore: 0,
   computerScore: 0,
+  currentComputerChoice: null,
   winner: null,
+};
+
+// COMPUTER`S CHOICE IMAGE DIRECTORY
+const computerChoice = {
+  Rock: { src: "./images/rock_retro.png", alt: "Rock" },
+  Paper: { src: "./images/paper_retro.png", alt: "Paper" },
+  Scissors: { src: "./images/scissors_retro.png", alt: "Scissors" },
 };
 
 // DOM HELPERS
@@ -93,12 +101,21 @@ function buildHumanPlayGround() {
   return humanPlayGroundWrapper;
 }
 
+function buildComputerChoice() {
+  const wrapper = createElement("div", { className: "computer-choice" });
+  const computerChoiceImage = createElement("img", {
+    id: "computer-choice-image",
+  });
+  wrapper.appendChild(computerChoiceImage);
+  return wrapper;
+}
+
 function buildComputerPlayGround() {
   const computerPlayGroundWrapper = createElement("div", {
     className: "computer-play-ground",
   });
   const computerScore = buildScore("computer-score", "COMPUTER");
-  computerPlayGroundWrapper.append(computerScore);
+  computerPlayGroundWrapper.append(computerScore, buildComputerChoice());
   return computerPlayGroundWrapper;
 }
 
@@ -117,16 +134,61 @@ function startGame() {
   render();
 }
 
-function onHumanChoice() {
+function getComputerChoice() {
+  const randomNumber = Math.random();
+  let randomChoice = "";
+  if (randomNumber >= 0 && randomNumber < 0.33) {
+    randomChoice = "Rock";
+  } else if (randomNumber >= 0.33 && randomNumber < 0.66) {
+    randomChoice = "Paper";
+  } else {
+    randomChoice = "Scissors";
+  }
+  return randomChoice;
+}
+
+function getWinner(humanChoice, computerChoice) {
+  gameState.currentComputerChoice = computerChoice;
+
+  if (computerChoice === humanChoice) {
+    return "Draw";
+  } else {
+    if (humanChoice === "Rock") {
+      if (computerChoice === "Paper") {
+        return "Computer";
+      } else {
+        return "Human";
+      }
+    } else if (humanChoice === "Paper") {
+      if (computerChoice === "Scissors") {
+        return "Computer";
+      } else {
+        return "Human";
+      }
+    } else {
+      // if human choose scissors
+      if (computerChoice === "Rock") {
+        return "Computer";
+      } else {
+        return "Human";
+      }
+    }
+  }
+}
+
+function onHumanChoice(event) {
   if (gameState.state === "ended") return;
 
-  // Simulate result (random winner)
-  const humanWins = Math.random() > 0.5;
+  const humanChoice = event.currentTarget.attributes.alt.value;
+  const computerChoice = getComputerChoice();
+  const winner = getWinner(humanChoice, computerChoice);
 
-  if (humanWins) {
+  if (winner === "Human") {
     gameState.humanScore += 1;
-  } else {
+  } else if (winner === "Computer") {
     gameState.computerScore += 1;
+  } else {
+    // TODO: Add something here
   }
 
   // Determine state transitions
@@ -183,23 +245,13 @@ function render() {
 
   renderAnnounceBoard();
 
-  if (gameState.state === "idle") {
-    document.getElementById("start-button").style.display = "block";
-    document.getElementById("rematch-button").style.display = "none";
-  } else if (gameState.state === "playing") {
-    document.getElementById("start-button").style.display = "none";
-    document.getElementById("status-text").textContent = "GAME STARTED!";
-    document.getElementById("rematch-button").style.display = "none";
-  } else if (gameState.state === "match-point") {
-    document.getElementById("start-button").style.display = "none";
-    document.getElementById("status-text").textContent = "MATCH POINT!";
-    document.getElementById("rematch-button").style.display = "none";
-  } else if (gameState.state === "ended") {
-    document.getElementById("start-button").style.display = "none";
-    document.getElementById(
-      "status-text"
-    ).textContent = `${gameState.winner} WIN`;
-    document.getElementById("rematch-button").style.display = "block";
+  const currentComputerChoice = gameState.currentComputerChoice;
+  const imageData = computerChoice[currentComputerChoice];
+  const imageEl = document.getElementById("computer-choice-image");
+  if (imageData) {
+    imageEl.src = imageData.src;
+    imageEl.alt = imageData.alt;
+    imageEl.height = "100";
   }
 }
 

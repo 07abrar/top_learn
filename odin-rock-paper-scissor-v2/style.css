@@ -38,7 +38,7 @@
     text-align: center;
 }
 
-.human-choice{
+.human-choice, .computer-choice{
     display: flex;
     gap: 24px;
 }
@@ -47,7 +47,7 @@
     cursor: pointer;
 }
 
-.human-play-ground{
+.human-play-ground, .computer-play-ground{
     display: flex;
     flex-direction: column;
     gap: 24px;
