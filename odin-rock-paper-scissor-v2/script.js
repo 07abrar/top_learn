@@ -210,6 +210,12 @@ function onHumanChoice(event) {
 // RENDER
 function renderAnnounceBoard() {
   announceBoardWrapper.innerHTML = "";
+  statusText.classList.remove(
+    "status-playing",
+    "status-match-point",
+    "status-win",
+    "status-lose"
+  );
 
   if (gameState.state === "idle") {
     announceBoardWrapper.append(startButton);
@@ -218,18 +224,23 @@ function renderAnnounceBoard() {
 
   if (gameState.state === "playing") {
     statusText.textContent = "GAME START!";
+    statusText.classList.add("status-playing");
     announceBoardWrapper.append(statusText);
     return;
   }
 
   if (gameState.state === "match-point") {
     statusText.textContent = "MATCH POINT!";
+    statusText.classList.add("status-match-point");
     announceBoardWrapper.append(statusText);
     return;
   }
 
   if (gameState.state === "ended") {
     statusText.textContent = `${gameState.winner} WIN!`;
+    const statusClass =
+      gameState.winner === "HUMAN" ? "status-win" : "status-lose";
+    statusText.classList.add(statusClass);
     announceBoardWrapper.append(statusText, rematchButton);
     return;
   }

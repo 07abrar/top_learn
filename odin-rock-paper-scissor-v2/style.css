@@ -6,11 +6,13 @@
 
 :root {
   --scanline: rgba(255, 255, 255, 0.08);
-  --frame: rgb(15, 15, 25);
-  --accent-red: rgb(255, 80, 100);
-  --accent-green: rgb(110, 255, 150);
-  --accent-gold: rgb(250, 200, 100);
-  --text-dark: rgb(15, 15, 25);
+  --frame-rgb: 12, 14, 26;
+  --frame: rgba(var(--frame-rgb), 1);
+  --accent-warm: rgba(255, 94, 122, 1);
+  --accent-cool: rgba(94, 255, 214, 1);
+  --accent-warning: rgba(255, 225, 120, 1);
+  --text-dark: rgba(16, 16, 22, 1);
+  --surface-light: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -26,9 +28,9 @@ body {
     sans-serif;
   background: linear-gradient(
       120deg,
-      rgb(200, 200, 150) 0%,
-      rgb(150, 150, 20) 35%,
-      rgb(50, 50, 110) 60%,
+      rgb(200, 200, 150, 0.5) 0%,
+      rgb(150, 150, 20, 0.9) 35%,
+      rgb(50, 50, 110, 0.9) 60%,
       rgb(10, 10, 100) 100%
     );
   background-attachment: fixed;
@@ -43,12 +45,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  background: rgba(150, 150, 50, 0.15);
+  background: linear-gradient(160deg, rgba(255, 225, 120, 0.2), rgba(255, 94, 122, 0.25));
   border: 8px solid var(--frame);
   border-radius: 18px;
-  box-shadow: 0 0 0 4px rgba(255, 255, 0), 10px 10px 10px rgba(200, 0, 0, 0.8);
+  box-shadow: 0 0 0 4px rgba(255, 225, 120, 0.95),
+    10px 14px 18px rgba(255, 94, 122, 0.45),
+    0 0 48px 8px rgba(94, 255, 214, 0.12);
   padding: 28px 32px 36px;
-  backdrop-filter: blur(150px);
+  backdrop-filter: blur(24);
 }
 
 .web-title {
@@ -62,7 +66,7 @@ body {
   font-size: clamp(20px, 3vw, 28px);
   letter-spacing: 2px;
   color: var(--text-dark);
-  text-shadow: 4px 4px rgb(255, 255, 0), 8px 8px rgba(0, 0, 0, 0.25);
+  text-shadow: 2px 2px var(--accent-warning), 4px 4px 18px rgba(var(--frame-rgb), 0.9);
 }
 
 .announce-board {
@@ -74,20 +78,40 @@ body {
   border: 4px solid var(--frame);
   border-radius: 12px;
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2), transparent),
-    rgba(10, 10, 100);
-  box-shadow: inset 0 0 0 4px rgb(255, 255, 0), 6px 6px 10px rgba(200, 0, 0, 0.8);
+    rgba(var(--frame-rgb), 0.9);
+  box-shadow: inset 0 0 0 4px var(--accent-warning),
+    6px 6px 14px rgba(255, 94, 122, 0.6), 0 0 24px rgba(94, 255, 214, 0.35);
 }
 
 #status-text {
   font-family: 'Press Start 2P', cursive;
   letter-spacing: 1px;
-  color: var(--accent-green);
   text-align: center;
+}
+
+.status-playing {
+  color: rgba(110, 255, 150, 0.95);
+  text-shadow: 0 0 8px rgba(110, 255, 150, 0.55);
+}
+
+.status-match-point {
+  color: rgba(250, 200, 100, 0.95);
+  text-shadow: 0 0 8px rgba(250, 200, 100, 0.55);
+}
+
+.status-win {
+  color: rgba(110, 255, 150, 0.95);
+  text-shadow: 0 0 8px rgba(110, 255, 150, 0.65);
+}
+
+.status-lose {
+  color: rgba(255, 80, 100, 0.95);
+  text-shadow: 0 0 8px rgba(255, 80, 100, 0.6);
 }
 
 #start-button,
 #rematch-button {
-  background: linear-gradient(90deg, rgba(255, 100, 120, 1),rgba(255, 150, 80, 1));
+  background: linear-gradient(90deg, var(--accent-warm), var(--accent-warning));
   padding: 14px 28px;
   border: 3px solid var(--frame);
   color: var(--text-dark);
@@ -97,7 +121,8 @@ body {
   cursor: pointer;
   border-radius: 10px;
   text-transform: uppercase;
-  box-shadow: 0 0 0 4px rgba(255, 255, 210);
+  box-shadow: 0 0 0 3px rgba(255, 225, 120, 0.8),
+    0 12px 20px rgba(255, 94, 122, 0.5), 0 0 30px rgba(255, 225, 120, 0.6);
   transition: transform 60ms ease, box-shadow 60ms ease;
 }
 
@@ -120,16 +145,20 @@ body {
   padding: 18px;
   border-radius: 12px;
   border: 4px solid var(--frame);
-  box-shadow: inset 0 0 8px 4px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 8px 4px rgba(var(--frame-rgb), 0.5);
 }
 
 .human-play-ground {
-  background: linear-gradient(135deg, rgba(255, 237, 143, 0.9), rgba(255, 186, 143, 0.85));
+  background: linear-gradient(135deg, rgba(255, 225, 120, 0.95), rgba(255, 94, 122, 0.9));
   color: var(--text-dark);
+  box-shadow: 0 0 0 4px rgba(255, 225, 120, 0.85), 0 12px 22px rgba(255, 94, 122, 0.35);
 }
 
 .computer-play-ground {
-  background: linear-gradient(135deg, rgba(35, 33, 61, 0.95), rgba(14, 12, 24, 0.95));
+  background: radial-gradient(circle at 40% 30%, rgba(94, 255, 214, 0.16), transparent 55%),
+    linear-gradient(145deg, rgba(var(--frame-rgb), 0.98), rgba(12, 24, 50, 0.9));
+  box-shadow: 0 0 0 4px rgba(94, 255, 214, 0.3), 0 16px 28px rgba(0, 0, 0, 0.45),
+    inset 0 0 32px rgba(94, 255, 214, 0.2);
 }
 
 .score {
@@ -140,15 +169,16 @@ body {
   padding: 10px;
   border-radius: 8px;
   border: 4px solid var(--frame);
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 234, 173, 0.9));
-  color: rgba(0, 0, 0);
-  box-shadow: 0 0 0 3px rgba(255, 218, 107, 1), 0 6px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(90deg, var(--surface-light), rgba(255, 215, 135, 0.88));
+  color: var(--text-dark);
+  box-shadow: 0 0 0 3px var(--accent-warning), 0 6px 12px rgba(var(--frame-rgb), 0.25);
 }
 
 .computer-play-ground .score {
-  background: linear-gradient(90deg, rgba(23, 22, 38, 0.95), rgba(46, 42, 78, 0.9));
-  color: var(--accent-green);
-  box-shadow: 0 0 0 3px rgba(109, 253, 140, 1), 0 6px 12px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(90deg, rgba(var(--frame-rgb), 0.92), rgba(94, 255, 214, 0.2));
+  color: var(--accent-cool);
+  box-shadow: 0 0 0 3px var(--accent-cool), 0 6px 14px rgba(var(--frame-rgb), 0.4),
+    0 0 28px rgba(94, 255, 214, 0.3);
 }
 
 .human-choice,
@@ -167,21 +197,22 @@ body {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 16px;
   border: 3px solid var(--frame);
-  box-shadow: 0 0 0 3px rgba(255, 232, 161, 1), 0 10px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 3px var(--accent-warning), 0 10px 20px rgba(var(--frame-rgb), 0.35);
   transition: transform 120ms ease, box-shadow 120ms ease, filter 200ms ease;
 }
 
 .human-choice img:hover {
   transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 0 0 3px var(--accent-green), 0 14px 28px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 3px var(--accent-cool), 0 16px 32px rgba(var(--frame-rgb), 0.45);
   filter: saturate(1.1);
   cursor: pointer;
 }
 
 .computer-choice img {
-  background: rgba(15, 13, 24, 0.95);
-  border-color: #6dfd8c;
-  box-shadow: 0 0 0 3px #6dfd8c, 0 10px 20px rgba(0, 0, 0, 0.4);
+  background: rgba(var(--frame-rgb), 0.95);
+  border-color: var(--accent-cool);
+  box-shadow: 0 0 0 3px var(--accent-cool), 0 12px 22px rgba(var(--frame-rgb), 0.4),
+    0 0 26px rgba(94, 255, 214, 0.35);
 }
 
 @media (max-width: 768px) {
