@@ -1,0 +1,19 @@
+* {
+    outline: 2px solid red;
+}
+
+.drawing-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-i {
+    display: flex;
+    flex-direction: row;
+}
+
+.grid-j{
+    width: 40px;
+    height: 40px;
+    background-color: white;
+}
