@@ -102,14 +102,18 @@ function buildDrawingBoard() {
   const wrapper = createElement("div", {
     className: "drawing-board",
   });
-  for (let i = 0; i < 5; i++) {
+  const gridNum = 50;
+  for (let i = 0; i < gridNum; i++) {
     const gridI = createElement("div", {
       className: "grid-i",
     });
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < gridNum; j++) {
       const gridJ = createElement("div", {
         className: "grid-j",
       });
+      const size = 750 / gridNum;
+      gridJ.style.width = `${size}px`;
+      gridJ.style.height = `${size}px`;
       gridI.append(gridJ);
     }
     wrapper.append(gridI);
