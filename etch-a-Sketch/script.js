@@ -58,6 +58,7 @@ function buildTopBarOptions() {
     id: "generate-button",
     text: "GENERATE",
   });
+  generateButton.addEventListener("click", regenerateDrawingBoard);
   const clearButton = createElement("button", {
     id: "clear-button",
     text: "CLEAR",
@@ -142,6 +143,25 @@ function buildDrawerWrapper() {
 }
 
 // DRAWING STATE
+function regenerateDrawingBoard() {
+  const input = document.getElementById("grid-size-input").value;
+  const value = Number(input);
+  if (!Number.isInteger(value) || value <= 0) {
+    alert("Please enter a valid positive number.");
+    return;
+  }
+  if (value > 200) {
+    alert("Maximum grid size is 200.");
+    return;
+  }
+  const drawerWrapper = document.querySelector(".drawer-wrapper");
+  const oldBoard = drawerWrapper.querySelector(".drawing-board");
+  if (oldBoard) oldBoard.remove();
+  const newBoard = buildDrawingBoard(value);
+  drawerWrapper.appendChild(newBoard);
+  clearDrawingBoard();
+}
+
 function clearDrawingBoard() {
   const cells = document.querySelectorAll(".grid-j");
   cells.forEach((cell) => {

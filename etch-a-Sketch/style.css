@@ -94,5 +94,6 @@ body{
 
 .grid-j{
     background-color: white;
-    border: 1px solid var(--frame)
+    border: 1px solid var(--frame);
+    box-sizing :border-box;
 }
