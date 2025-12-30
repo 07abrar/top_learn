@@ -62,6 +62,7 @@ function buildTopBarOptions() {
     id: "clear-button",
     text: "CLEAR",
   });
+  clearButton.addEventListener("click", clearDrawingBoard);
   wrapper.append(generateButton, clearButton);
   return wrapper;
 }
@@ -141,6 +142,20 @@ function buildDrawerWrapper() {
 }
 
 // DRAWING STATE
+function clearDrawingBoard() {
+  const cells = document.querySelectorAll(".grid-j");
+  cells.forEach((cell) => {
+    cell.style.backgroundColor = "";
+    cell.style.opacity = "";
+    delete cell.dataset.prevBg;
+  });
+
+  lastHoverCell = null;
+  isDrawing = false;
+  isEraserButtonPressed = false;
+  document.getElementById("eraser")?.classList.toggle("active", false);
+}
+
 function updateCurrentColor() {
   const red = document.getElementById("red-color").value || 0;
   const green = document.getElementById("green-color").value || 0;
