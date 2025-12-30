@@ -33,7 +33,17 @@ function createInputField(id, { type, placeholder }) {
 // UI BUILDERS
 function buildTitle() {
   const wrapper = createElement("div", { className: "web-title" });
-  const title = createElement("h1", { text: "ETCH A SKETCH" });
+  const title = createElement("h1", { className: "etch-title" });
+  const text = "ETCH A SKETCH";
+  [...text].forEach((char) => {
+    if (char === " ") {
+      const spacer = createElement("span", { className: "etch-space" });
+      title.appendChild(spacer);
+      return;
+    }
+    const span = createElement("span", { text: char });
+    title.appendChild(span);
+  });
   wrapper.appendChild(title);
   return wrapper;
 }
@@ -220,7 +230,7 @@ function hoverCell(cell) {
 
   cell.dataset.prevBg = cell.style.backgroundColor || "";
   cell.style.backgroundColor = currentColor;
-  cell.style.opacity = "0.15";
+  cell.style.opacity = "0.2";
 
   lastHoverCell = cell;
 }
