@@ -1,5 +1,5 @@
 * {
-    outline: 2px solid red;
+    /* outline: 2px solid red; */
 }
 
 :root {
@@ -89,4 +89,5 @@ body{
 
 .grid-j{
     background-color: white;
+    border: 1px solid var(--frame)
 }

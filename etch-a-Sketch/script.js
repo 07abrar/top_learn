@@ -4,6 +4,11 @@ if (!container) {
   throw new Error("container not found.");
 }
 
+// DRAWING STATES
+let currentColor = "rgb(0, 0, 0)";
+let isDrawing = false;
+let lastHoverCell = null;
+
 // DOM HELPER
 function createElement(tag, { className, text, id, attrs } = {}) {
   const el = document.createElement(tag);
@@ -74,14 +79,17 @@ function buildColorPicker() {
     type: "number",
     placeholder: "0-255",
   });
-  const green = createInputField("red-color", {
+  const green = createInputField("green-color", {
     type: "number",
     placeholder: "0-255",
   });
-  const blue = createInputField("red-color", {
+  const blue = createInputField("blue-color", {
     type: "number",
     placeholder: "0-255",
   });
+  [red, green, blue].forEach((color) =>
+    color.addEventListener("input", updateCurrentColor)
+  );
   wrapper.append(red, green, blue);
   return wrapper;
 }
@@ -98,11 +106,10 @@ function buildSideBarOptions() {
   return wrapper;
 }
 
-function buildDrawingBoard() {
+function buildDrawingBoard(gridNum = 50) {
   const wrapper = createElement("div", {
     className: "drawing-board",
   });
-  const gridNum = 50;
   for (let i = 0; i < gridNum; i++) {
     const gridI = createElement("div", {
       className: "grid-i",
@@ -126,6 +133,60 @@ function buildDrawerWrapper() {
   wrapper.append(buildSideBarOptions(), buildDrawingBoard());
   return wrapper;
 }
+
+// DRAWING STATE
+function updateCurrentColor() {
+  const red = document.getElementById("red-color").value || 0;
+  const green = document.getElementById("green-color").value || 0;
+  const blue = document.getElementById("blue-color").value || 0;
+  currentColor = `rgb(${red}, ${green}, ${blue})`;
+}
+
+// eventListener for drawing in drawing-board
+document.addEventListener("mousedown", (e) => {
+  if (!e.target.classList.contains("grid-j")) return;
+  isDrawing = true;
+  drawCell(e.target);
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!e.target.classList.contains("grid-j")) return;
+  if (isDrawing) {
+    drawCell(e.target);
+  } else {
+    hoverCell(e.target);
+  }
+});
+
+function drawCell(cell) {
+  clearHover();
+  cell.style.backgroundColor = currentColor;
+}
+
+function hoverCell(cell) {
+  if (lastHoverCell === cell) return;
+  clearHover();
+
+  cell.dataset.prevBg = cell.style.backgroundColor || "";
+  cell.style.backgroundColor = currentColor;
+  cell.style.opacity = "0.15";
+
+  lastHoverCell = cell;
+}
+
+function clearHover() {
+  if (!lastHoverCell) return;
+
+  lastHoverCell.style.backgroundColor = lastHoverCell.dataset.prevBg;
+  lastHoverCell.style.opacity = "";
+  delete lastHoverCell.dataset.prevBg;
+  lastHoverCell = null;
+}
+
+document.addEventListener("mouseup", () => {
+  clearHover();
+  isDrawing = false;
+});
 
 // INITIAL BOOTSTRAP
 container.append(buildTitle(), buildTopBar(), buildDrawerWrapper());
