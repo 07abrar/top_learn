@@ -69,6 +69,11 @@ body{
     padding: 8px;
 }
 
+#eraser.active {
+    transform: translate(-3px, 3px);
+    box-shadow: inset -3px 3px 3px rgba(0,0,0,0.6);
+}
+
 .color-picker{
     display: flex;
     flex-direction: column;

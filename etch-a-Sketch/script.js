@@ -7,6 +7,7 @@ if (!container) {
 // DRAWING STATES
 let currentColor = "rgb(0, 0, 0)";
 let isDrawing = false;
+let isEraserButtonPressed = false;
 let lastHoverCell = null;
 
 // DOM HELPER
@@ -102,6 +103,11 @@ function buildSideBarOptions() {
     id: "eraser",
     text: "ERASE",
   });
+  eraserButton.addEventListener("click", (e) => {
+    isEraserButtonPressed = !isEraserButtonPressed;
+    eraserButton.classList.toggle("active", isEraserButtonPressed);
+  });
+
   wrapper.append(eraserButton, buildColorPicker());
   return wrapper;
 }
@@ -149,6 +155,12 @@ document.addEventListener("mousedown", (e) => {
   drawCell(e.target);
 });
 
+// Tiny timing/movement differences can be considered as drag and drop by the browser
+// Add a guard to prevent this behaviour
+document.addEventListener("dragstart", (e) => {
+  if (e.target.closest?.(".drawing-board")) e.preventDefault();
+});
+
 document.addEventListener("mousemove", (e) => {
   if (!e.target.classList.contains("grid-j")) return;
   if (isDrawing) {
@@ -160,7 +172,11 @@ document.addEventListener("mousemove", (e) => {
 
 function drawCell(cell) {
   clearHover();
-  cell.style.backgroundColor = currentColor;
+  if (isDrawing && !isEraserButtonPressed) {
+    cell.style.backgroundColor = currentColor;
+  } else if (isDrawing && isEraserButtonPressed) {
+    cell.style.backgroundColor = "";
+  }
 }
 
 function hoverCell(cell) {
