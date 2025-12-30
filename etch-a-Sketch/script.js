@@ -111,6 +111,7 @@ function buildSideBarOptions() {
   const wrapper = createElement("div", {
     className: "side-button-wrapper",
   });
+  const toolkit = createElement("div", { className: "toolkit" });
   const eraserButton = createElement("button", {
     id: "eraser",
     text: "ERASE",
@@ -119,8 +120,8 @@ function buildSideBarOptions() {
     isEraserButtonPressed = !isEraserButtonPressed;
     eraserButton.classList.toggle("active", isEraserButtonPressed);
   });
-
-  wrapper.append(eraserButton, buildColorPicker());
+  toolkit.append(eraserButton, buildColorPicker());
+  wrapper.append(toolkit);
   return wrapper;
 }
 
