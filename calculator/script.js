@@ -84,6 +84,20 @@ function buildOneRowKeyPad(row, button, label, valueOverride) {
 function buildKeyPad() {
   const keyPad = createElement("div", { className: "display" });
 
+  const firstRow = createElement("div", { className: "btn-wrapper" });
+  ["CLEAR", "DELETE"].forEach((operationName) => {
+    const btnTop = createElement("button", {
+      className: "btn-top",
+      text: operationName,
+      attrs: {
+        "data-value": operationName,
+        "data-label": "del",
+      },
+    });
+    firstRow.appendChild(btnTop);
+  });
+  keyPad.appendChild(firstRow);
+
   Object.values(keyLayout).forEach((row) => {
     const rowWrapper = createElement("div", { className: "btn-wrapper" });
 
@@ -175,6 +189,19 @@ document.addEventListener("click", (e) => {
       calculatorState.currentValue = "0.";
     } else {
       calculatorState.currentValue += value;
+    }
+  } else if (label === "del") {
+    if (value === "CLEAR") {
+      calculatorState.currentValue = null;
+      calculatorState.lastValue = null;
+      calculatorState.currentOperation = null;
+    } else {
+      if (!calculatorState.currentValue) {
+        calculatorState.currentValue = null;
+      } else {
+        calculatorState.currentValue =
+          calculatorState.currentValue.slice(0, -1) || null;
+      }
     }
   }
   render();
